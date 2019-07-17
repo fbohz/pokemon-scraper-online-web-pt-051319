@@ -1,15 +1,20 @@
 class Pokemon
   attr_accessor :id, :name, :type, :db 
   
-  def initialize (id=nil, name:, type:, db:)
-    
+  def initialize (id:, name:, type:, db:)
+    @id = id
+    @name = name
+    @type = type
+    @db = db
   end 
   
-  def save 
-    
+  def self.save(name, type, db) 
+    db.execute("INSERT INTO pokemon (name, type) VALUES (?, ?)", name, type)
   end 
   
-  def self.find 
+  def self.find(id, db) 
+    result = db.execute("SELECT * FROM pokemon WHERE id = ? LIMIT 1", id).flatten
+    self.new(id: id, name: result[1], type: result[2], db: db)
   end 
   
 end
